@@ -4,7 +4,7 @@ A simple online RDF Turtle editor.
 
 ## Dependencies and Installation
 
-TBD
+* [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js)
 
 ## Open Issues
 

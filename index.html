@@ -18,16 +18,20 @@
 			<span class="ctrl-item"><a href="http://groups.csail.mit.edu/haystack/blog/2008/11/06/a-quick-tutorial-on-the-tutrle-rdf-serialization/" target="_new" title="A Quick Tutorial on the Turtle RDF Serialization">Turtle tutorial ...</a></span>
 			<span class="ctrl-item"><a href="http://prefix.cc/" target="_new" title="namespace lookup for RDF developers">Prefixes ...</a></span>
 			</div>
-			<textarea id="turtle" rows="20" cols="70" title="Enter some valid RDF Turtle here and hit the 'Visualise!' button below ...">
+			<textarea id="tinput" rows="20" cols="70" title="Enter some valid RDF Turtle here and hit the 'Visualise!' button below ...">
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix schema: <http://schema.org/> .
+@prefix : <http://example.org/#> .
 
+:me a foaf:Person ;
+ rdfs:label "Michael" .
 			</textarea>
 			<div id="in-ctrl">
 				<button id="vis">Visualise!</button>
+				<div id="status">Status: waiting for user input</div>
 			</div>
 		</div>
 		<div id="out">
@@ -39,5 +43,8 @@
 		Last update: 2012-07-27 | 
 		Source: <a href="http://github.com/mhausenblas/turtled">GitHub repo</a>
 	</footer>
+	<script src="jquery-1.7.2.min.js"></script>
+	<script src="rdf_store_min.js"></script>
+	<script src="turtled.js"></script>
 </body>
 </html>
