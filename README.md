@@ -18,6 +18,6 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 * SVG export
 * restrict via SPARQL query
 
-## License
+## License and Acknowledgements
 
-Public domain
+The software provided here is in the public domain. Kudos go out to [Richard Cyganiak](https://github.com/cygri) who had the original idea and to all the wonderful people who spent their time making jQuery, rdfstore-js and VivaGraph.JS so useable, useful and awesome.
