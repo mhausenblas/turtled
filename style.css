@@ -1,0 +1,45 @@
+body {
+	font-family: 'Metrophobic', sans-serif;
+	font-size: 16pt;
+	margin: 0 auto;
+	background: #fafafa;
+	padding: 0;
+	width: 45%;
+	text-align: justify;
+}
+
+h1 {
+	font-size: 250%;
+	font-weight: 100;
+	margin: 1em 0 0 0;
+	text-shadow: 3px 3px 5px #ccc;
+}
+
+a {
+	color: #909090;
+}
+
+footer {
+	font-size: 50%;
+	text-align: center;
+	margin: 4em 0 0 1em;
+}
+
+
+#top p {
+	color: #c0c0c0;
+	font-weight: 100;
+	font-size: 100%;
+	
+}
+
+#main {
+}
+
+#in {
+	float: left;
+}
+
+#out {
+	clear: left;
+}
