@@ -15,7 +15,8 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
-* label of links
+* clear must reset status
+* label of links is missing
 * resize
 * SVG export
 * restrict via SPARQL query
