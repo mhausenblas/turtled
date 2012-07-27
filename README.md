@@ -2,6 +2,8 @@
 
 A simple online RDF Turtle editor.
 
+![Screen shot of turtled v0.0 in action](https://github.com/mhausenblas/turtled/raw/master/doc/turtled-screen-shot-v00.png "Screen shot of turtled v0.0 in action")
+
 ## Dependencies and Installation
 
 turtled depends on the following JS libraries (in addition to jQuery), all included in the repo:
