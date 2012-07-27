@@ -1,7 +1,7 @@
 body {
 	font-family: 'Metrophobic', sans-serif;
 	font-size: 16pt;
-	margin: 0 auto;
+	margin: 4em;
 	background: #fafafa;
 	padding: 0;
 	width: 45%;
@@ -33,10 +33,9 @@ textarea {
 }
 
 
-footer {
+#info {
 	font-size: 50%;
-	text-align: center;
-	margin: 4em 0 0 1em;
+	text-align: left;
 }
 
 
@@ -76,7 +75,8 @@ footer {
 
 
 #out {
-	clear: left;
+	width: 100%;
+	text-align: center;
 }
 
 .ctrl-item {
