@@ -7,7 +7,13 @@ $(document).ready(function(){
 			status("");
 			
 			store.load("text/turtle", tinput, function(success, results) {
-				status("Valid RDF Turtle: " + success);
+				if(success){
+					status("Valid RDF Turtle. Loaded <strong>" + results + "</strong> triples.");
+				}
+				else {
+					status("<span style='color:red'>Invalid RDF Turtle :(</span>" );
+				}
+				
 			});
 		});
 		
@@ -16,4 +22,16 @@ $(document).ready(function(){
 
 function status(msg){
 	$('#status').html(msg);
+}
+
+
+function listTriples(){
+	store.execute("SELECT * { ?s ?p ?o }", function(success, results){
+	  if(success) {
+	    // process results        
+	    if(results[0].s.token === 'uri') {
+	      console.log(results[0].s.value);
+	    }       
+	  }
+	});
 }
