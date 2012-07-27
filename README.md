@@ -13,6 +13,11 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
+* label of links
+* resize
+* SVG export
+* restrict via SPARQL query
+
 ## License
 
 Public domain
