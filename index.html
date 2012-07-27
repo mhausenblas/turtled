@@ -26,8 +26,15 @@
 @prefix schema: <http://schema.org/> .
 @prefix : <http://example.org/#> .
 
-:me a foaf:Person ;
- rdfs:label "Michael" .
+:m a foaf:Person ;
+    rdfs:label "Michael" ;
+    foaf:knows :r ;
+.
+
+:r a foaf:Person ;
+   rdfs:label "Richard" ;
+.
+
 			</textarea>
 			<div id="in-ctrl">
 				<button id="vis">Visualise!</button>
