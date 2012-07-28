@@ -55,10 +55,11 @@ graphics.node(function(node) {
 	
 });
 
-// graphics.link(function(link) {
-// 		return Viva.Graph.svg('line')
-// 				.attr('title', link.data.label);
-// });
+graphics.link(function(link) {
+		return Viva.Graph.svg('line')
+				.attr('style', 'stroke: #000; fill: #000')
+				.attr('title', link.data.label);
+});
 
 
 $(document).ready(function(){
@@ -99,13 +100,17 @@ $(document).ready(function(){
 			alert('not yet implemented');
 		});
 	
-		// handling of selected node display
+		// handling of selected node and arc display
 		$("ellipse").live('click', function(event){
 			status("You've selected the resource: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
 		});
 		
 		$("rect").live('click', function(event){
 			status("You've selected the literal: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
+		});
+
+		$("line").live('click', function(event){
+			status("You've selected the property: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
 		});
 		
 		

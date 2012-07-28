@@ -15,7 +15,6 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
-* labels of links are missing
 * save input and/or query via [Web storage](http://playground.html5rocks.com/#localstorage)
 * resize
 * SVG export
