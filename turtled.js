@@ -1,5 +1,8 @@
 var graph = Viva.Graph.graph();
 var graphics = Viva.Graph.View.svgGraphics();
+var turtledstorage = window.localStorage;
+var MAX_ENTRIES = 10;
+var entrycntr = 0;
 
 var ex1 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\
@@ -64,7 +67,11 @@ graphics.link(function(link) {
 
 $(document).ready(function(){
 
-	$("#out").css('margin-left', $("#in").width() + 10); // adjust size of output area
+	// adjust size of output area
+	$("#out").css('margin-left', $("#in").width() + 10); 
+	
+	// list saved entries
+	buildEntryList();
 
 	// first, the RDF store needs to be ready, then we set up the UI/UX
 	rdfstore.create(function(store) {
@@ -95,9 +102,44 @@ $(document).ready(function(){
 		$("#ex1").click(function(event){ $('#tinput').val(ex1); });
 		$("#ex2").click(function(event){ $('#tinput').val(ex2); });
 
-		// handling save of data or query
+		// handling entry save and load
 		$("#save").click(function(event){
-			alert('not yet implemented');
+			var ename = prompt('Entry name:', '');
+			if (ename) {
+				if( entrycntr < MAX_ENTRIES ) {
+					saveCLOB('turtled.net' + entrycntr, ename, $("#tinput").val());
+					entrycntr += 1;
+					buildEntryList();
+					status("RDF Turtle input saved.");
+				}
+				else {
+					status("Can only save up to " + MAX_ENTRIES + " entries, sorry.");
+				}
+			}
+			else{
+				status("You haven't told me under which name to save the entry, canceling ...");
+			}
+		});
+		
+		$(".entry").live('click', function(event){
+			var ename = getCLOB($(this).attr('id')).name;
+			// var timestamp = getCLOB($(this).attr('id')).timestamp;
+			var rdfturtle = getCLOB($(this).attr('id')).payload;
+			$("#tinput").val(rdfturtle); 
+			$("#currententry").html(ename + " <button id='delete' title='" + $(this).attr('id') + "'>Delete!</button>");
+		});
+		
+		$("#delete").live('click', function(event){
+			var response = confirm('Are you sure you want to delete this entry?');
+			if (response) {
+				removeCLOB($(this).attr('title')); // using @title of the delete button to remeber which entry we're on
+				$("#currententry").html("");
+				buildEntryList();
+				status("Entry deleted.");
+			}
+			else{
+				status("Canceling deletion ...");
+			}
 		});
 	
 		// handling of selected node and arc display
@@ -112,7 +154,6 @@ $(document).ready(function(){
 		$("line").live('click', function(event){
 			status("You've selected the property: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
 		});
-		
 		
 	});
 });
@@ -150,5 +191,34 @@ function renderGraph(containerID){
 	});
 	renderer.run();
 }
+
+
+// low-level storage API
+
+function buildEntryList(){
+	$("#entries").html("");
+	for (var i=0; i < MAX_ENTRIES; i++) {
+		if(turtledstorage.getItem('turtled.net' + i)) {
+			var ename = getCLOB('turtled.net' + i ).name;
+			var timestamp = getCLOB('turtled.net' + i ).timestamp;			
+			$("#entries").append("<span class='entry' title='last updated on " +  timestamp + "' id='turtled.net" + i + "'>" + ename + "</span>");
+		}
+	}
+}
+
+function saveCLOB(key, name, payload) {
+	var entry = { timestamp : new Date() , name: name, payload : payload };
+	turtledstorage.setItem(key, JSON.stringify(entry));
+}
+
+function getCLOB(key){
+	var clob = JSON.parse(turtledstorage.getItem(key));
+	return clob;
+}
+
+function removeCLOB(key){
+	turtledstorage.removeItem(key);
+}
+
 
 

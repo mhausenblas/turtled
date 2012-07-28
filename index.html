@@ -30,6 +30,7 @@
 				<span id="ex2">Authorship (Dublin Core) </span>
 			</div>
 			
+			<div id="currententry"></div>
 			<textarea id="tinput" rows="17" cols="70" title="Enter some valid RDF Turtle here and hit the 'Visualise!' button below ...">
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -37,10 +38,14 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix schema: <http://schema.org/> .
 @prefix : <http://example.org/#> .
+
+:x a schema:Thing .
+
 </textarea>
 			<div id="in-ctrl">
 				<button id="vis">Visualise!</button>
-				<button id="save">Save</button>
+				<button id="save">Save ...</button>
+				<span id="entries"></span>
 				<div id="status">Status: waiting for user input</div>
 			</div>
 		</div>
@@ -50,6 +55,7 @@
 	<script src="jquery-1.7.2.min.js"></script>
 	<script src="vivagraph.min.js"></script>
 	<script src="rdf_store_min.js"></script>
+	<script src="json2.js"></script>	
 	<script src="turtled.js"></script>
 </body>
 </html>
