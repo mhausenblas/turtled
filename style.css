@@ -1,7 +1,7 @@
 body {
 	font-family: 'Metrophobic', sans-serif;
 	font-size: 16pt;
-	margin: 4em;
+	margin: 1em 2em;
 	background: #fafafa;
 	padding: 0;
 	width: 45%;
@@ -11,12 +11,11 @@ body {
 h1 {
 	font-size: 350%;
 	font-weight: 100;
-	margin: 1em 0 0 0;
 	text-shadow: 3px 3px 5px #ccc;
 }
 
 a {
-	color: #909090;
+	color: #202020;
 }
 
 textarea {
@@ -40,9 +39,11 @@ textarea {
 
 
 #top p {
-	color: #c0c0c0;
+	color: #a0a0a0;
 	font-weight: 100;
-	font-size: 100%;
+	font-size: 90%;
+	margin: 1em 0 1em 0;
+	width: 600px;
 }
 
 #main {
@@ -55,6 +56,13 @@ textarea {
 #in-support {
 	text-align: right;
 	margin: 0 0 10px 0;
+}
+
+#examples-sel {
+	display: none;
+	font-size: 70%;
+	margin: 0 0 10px 0;
+	cursor: pointer;
 }
 
 #status {
@@ -83,4 +91,5 @@ textarea {
 .ctrl-item {
 	font-size: 80%;
 	margin: 0 .5em 0 0;
+	cursor: pointer;
 }

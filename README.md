@@ -15,11 +15,12 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
-* clear must reset status
-* label of links is missing
+* labels of links are missing
+* save input and/or query via [Web storage](http://playground.html5rocks.com/#localstorage)
 * resize
 * SVG export
 * restrict via SPARQL query
+* proper credit (DERI, etc)
 
 ## License and Acknowledgements
 

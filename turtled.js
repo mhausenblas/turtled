@@ -1,6 +1,37 @@
 var graph = Viva.Graph.graph();
 var graphics = Viva.Graph.View.svgGraphics();
 
+var ex1 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\
+@prefix : <http://example.org/#> .\n\
+\n\
+:m a foaf:Person ;\n\
+    rdfs:label "Michael" ;\n\
+    foaf:knows :r ;\n\
+.\n\
+\n\
+:r a foaf:Person ;\n\
+   rdfs:label "Richard" ;\n\
+.';
+
+var ex2 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\
+@prefix dc: <http://purl.org/dc/elements/1.1/> .\n\
+@prefix schema: <http://schema.org/> .\n\
+@prefix : <http://example.org/#> .\n\
+\n\
+:m a foaf:Person ;\n\
+    rdfs:label "Michael" ;\n\
+    dc:author :p ;\n\
+.\n\
+\n\
+:p a schema:ScholarlyArticle ;\n\
+   rdfs:label "A very important lesson learned ..." ;\n\
+   dc:created "2011-11-11" ;\n\
+.';
+
+
+
 // node.data holds custom object passed to graph.addNode();
 graphics.node(function(node) {
 	if (node.data.type == 'literal') {
@@ -34,13 +65,17 @@ $(document).ready(function(){
 
 	$("#out").css('margin-left', $("#in").width() + 10); // adjust size of output area
 
+	// first, the RDF store needs to be ready, then we set up the UI/UX
 	rdfstore.create(function(store) {
 		
 		$("#vis").click(function(event){
-			var tinput = $('#tinput').val();
+			var tinput = $("#tinput").val();
+			$("#out").html("");
+			resetGraph(store);
 			
-			status("");
+			status("Parsing input ...");
 			
+			// try parsing the user-supplied input and if successful, build the graph and render it
 			store.load("text/turtle", tinput, function(success, results) {
 				if(success){
 					status("Valid RDF Turtle. Loaded <strong>" + results + "</strong> triples.");
@@ -54,10 +89,17 @@ $(document).ready(function(){
 			});
 		});
 		
-		$("#clear").click(function(event){
-			$("#out").html("");
+		// handling examples
+		$("#examples").click(function(event){ $('#examples-sel').slideToggle('slow'); });
+		$("#ex1").click(function(event){ $('#tinput').val(ex1); });
+		$("#ex2").click(function(event){ $('#tinput').val(ex2); });
+
+		// handling save of data or query
+		$("#save").click(function(event){
+			alert('not yet implemented');
 		});
 	
+		// handling of selected node display
 		$("ellipse").live('click', function(event){
 			status("You've selected the resource: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
 		});
@@ -74,6 +116,10 @@ function status(msg){
 	$('#status').html(msg);
 }
 
+function resetGraph(store){
+	graph = Viva.Graph.graph();
+	store.clear();
+}
 
 function buildGraph(store){
 	store.execute("SELECT * { ?s ?p ?o }", function(success, results){
