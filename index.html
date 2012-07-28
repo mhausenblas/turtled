@@ -39,13 +39,22 @@
 @prefix schema: <http://schema.org/> .
 @prefix : <http://example.org/#> .
 
-:x a schema:Thing .
-
+:x a schema:Thing ;
+   rdfs:label "a thing" ;
+.
 </textarea>
 			<div id="in-ctrl">
-				<button id="vis">Visualise!</button>
-				<button id="save">Save ...</button>
-				<span id="entries"></span>
+				<button id="vis">Visualise!</button> <span id="restrict" title="click to show/hide">Restrict ...</span>
+				<div id="restrictions">
+					<textarea id="sinput" rows="10" cols="70" title="Enter a valid SPARQL CONSTRUCT query here that will be applied to the input ...">
+CONSTRUCT { <http://example.org/#x> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o }
+WHERE { <http://example.org/#x> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o  }
+					</textarea>
+				</div>
+				<div>
+					<button id="save">Save ...</button>
+					<span id="entries"></span>
+				</div>
 				<div id="status">Status: waiting for user input</div>
 			</div>
 		</div>

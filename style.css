@@ -58,6 +58,17 @@ textarea {
 	margin: 0 0 10px 0;
 }
 
+#restrict {
+	font-size: 70%;
+	margin: 0 0 0 .5em;
+	cursor: pointer;
+}
+
+#restrictions {
+	display: none;
+	margin: 10px 0 0 0;
+}
+
 #entries {
 	margin: 0 0 0 1em;
 }

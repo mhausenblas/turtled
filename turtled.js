@@ -87,7 +87,12 @@ $(document).ready(function(){
 			store.load("text/turtle", tinput, function(success, results) {
 				if(success){
 					status("Valid RDF Turtle. Loaded <strong>" + results + "</strong> triples.");
-					buildGraph(store);
+					if($("#restrictions").is(":visible")){
+						applyRestriction(store, $("#sinput").val());
+					}
+					else{
+						buildGraph(store);
+					}
 					renderGraph("out");
 				}
 				else {
@@ -102,6 +107,9 @@ $(document).ready(function(){
 		$("#ex1").click(function(event){ $('#tinput').val(ex1); });
 		$("#ex2").click(function(event){ $('#tinput').val(ex2); });
 
+		// handling restrictions (via SPARQL query)
+		$("#restrict").click(function(event){ $('#restrictions').slideToggle('slow'); });
+		
 		// handling entry save and load
 		$("#save").click(function(event){
 			var ename = prompt('Entry name:', '');
@@ -182,6 +190,33 @@ function buildGraph(store){
 		}
 	});
 }
+
+function applyRestriction(store, query){
+	store.execute(query, function(success, graph){
+		store.insert(graph, "http://turtled.net/restrictions#", function(success) {
+			
+			var defaultGraph = [];
+			var namedGraphs  = [{'token':'uri', 'value': "http://turtled.net/restrictions#"}];
+			
+			store.executeWithEnvironment("SELECT * { ?s ?p ?o }", null, namedGraphs, function(success, results){
+				if(success) {
+					for (var i=0; i < results.length; i++) {
+						graph.addNode(results[i].s.value, { label : results[i].s.value, type : results[i].s.token });
+						graph.addNode(results[i].o.value, { label : results[i].o.value, type : results[i].o.token }); 
+						graph.addLink(results[i].s.value, results[i].o.value, { label : results[i].p.value });
+					};
+					status("Successfully built the graph.");
+				}
+				else {
+					status("<span style='color:red'>Problem building the graph, sorry. Blame Michael ...</span>" );
+				}
+			});
+		}) ;
+	});
+}
+
+
+
 
 function renderGraph(containerID){
 	var renderer = Viva.Graph.View.renderer(graph, {
