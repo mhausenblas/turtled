@@ -192,16 +192,10 @@ function buildGraph(store){
 }
 
 function applyRestriction(store, query){
-	store.execute(query, function(success, graph){
-		store.insert(graph, "http://turtled.net/restrictions#", function(success) {
-			
-			var defaultGraph = [];
+	store.execute(query, function(success, g){
+		store.insert(g, "http://turtled.net/restrictions#", function(success) {
 			var namedGraphs  = ["http://turtled.net/restrictions#"];
-			
-			// Not sure about the logic. The array of namedGraphs seems not to have any effect in the outcome
-			// of the query...
-			// defaultGraph should be namedGraphs maybe?
-			store.executeWithEnvironment("SELECT * { ?s ?p ?o }", defaultGraph, namedGraphs, function(success, results){
+			store.executeWithEnvironment("SELECT * { ?s ?p ?o }", namedGraphs, namedGraphs, function(success, results){
 				if(success) {
 					for (var i=0; i < results.length; i++) {
 						graph.addNode(results[i].s.value, { label : results[i].s.value, type : results[i].s.token });

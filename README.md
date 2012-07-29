@@ -15,11 +15,10 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
-* restrict via SPARQL query
 * proper credit (DERI, etc)
 * SVG export
 * arrows, ltr layout, resize
 
 ## License and Acknowledgements
 
-The software provided here is in the public domain. Kudos go out to [Richard Cyganiak](https://github.com/cygri) who had the original idea and to all the wonderful people who spent their time making jQuery, rdfstore-js and VivaGraph.JS so useable, useful and awesome.
+The software provided here is in the public domain. Kudos go out to [Richard Cyganiak](https://github.com/cygri) who had the original idea and to all the wonderful people who spent their time making jQuery, rdfstore-js and VivaGraph.JS so useable, useful and awesome - especially a shout out to [Antonio Garrote](https://github.com/antoniogarrote) who provided excellent first-level support for his library.
