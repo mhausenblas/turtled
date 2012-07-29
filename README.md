@@ -15,6 +15,8 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
+* when example selected, clear entry display
+* show graph stats (triples, etc)
 * labels for links
 * arrows, ltr layout
 
