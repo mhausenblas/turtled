@@ -62,7 +62,7 @@ img {
 }
 
 #labels {
-	display: none;
+
 }
 
 #restrict {
@@ -137,8 +137,25 @@ img {
 #out-support {
 	text-align: right;
 	position: fixed;
-	right: 4px;
-	top: 25px;
+	right: 5px;
+	top: 20px;
+	display: none;
+	padding: 0;
+}
+
+#svgout {
+	position: fixed;
+	left: 20px;
+	top: 20px;
+	z-index: 1000;
+	text-align: right;
+}
+
+#svgout div textarea {
+	font-size: 70%;
+	border: 1px solid #303030;
+	padding: 10px;
+	background: #fff;
 }
 
 #ack {

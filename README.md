@@ -15,7 +15,6 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
-* SVG export
 * labels for links
 * arrows, ltr layout
 

@@ -110,7 +110,7 @@ $(document).ready(function(){
 		$("#vis").click(function(event){
 			var tinput = $("#tinput").val();
 			$("#out").html("");
-			$("#labels").hide();
+			$("#out-support").hide();
 			resetGraph(store);
 			
 			status("Parsing input ...");
@@ -127,7 +127,7 @@ $(document).ready(function(){
 					}
 					$("#out").show("");
 					renderGraph("out");
-					$("#labels").show();
+					$("#out-support").show();
 					
 				}
 				else {
@@ -151,7 +151,7 @@ $(document).ready(function(){
 		$("#ex1").click(function(event){ $("#tinput").val(ex1); });
 		$("#ex2").click(function(event){ $("#tinput").val(ex2); });
 
-		// handling node/link lables rendering
+		// handling output support (node/link lables rendering, SVG export)
 		$("#labels").click(function(event){
 			$("#out").html("");
 			if(labelsvis){
@@ -166,6 +166,19 @@ $(document).ready(function(){
 			}
 			renderGraph("out");
 		});
+
+		$("#svgexport").click(function(event){
+			var basesvg = $("#out").html();
+			var header = '<?xml version="1.0" encoding="UTF-8"?>\n\
+ <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">';
+			var svgcontent = header + '\n  ' + basesvg.substring(basesvg.indexOf('<svg>') + '<svg>'.length);
+			$("body").prepend("<div class='svgout'><button id='closesvgout'>Close</button><div><textarea rows='20' cols='80'>\n" + svgcontent + "</textarea></div></div>");
+		});
+		
+		$("#closesvgout").live('click', function(event){
+			$(".svgout").remove();
+		});
+		
 
 		// handling restrictions (via SPARQL query)
 		$("#restrict").click(function(event){ 
