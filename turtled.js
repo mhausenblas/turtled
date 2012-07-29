@@ -3,6 +3,7 @@ var graphics = Viva.Graph.View.svgGraphics();
 var turtledstorage = window.localStorage;
 var MAX_ENTRIES = 10;
 var entrycntr = 0;
+var labelsvis = false;
 
 var ex1 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\
@@ -37,38 +38,68 @@ var ex2 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
 
 // node.data holds custom object passed to graph.addNode();
 graphics.node(function(node) {
-	if (node.data.type == 'literal') {
-		return Viva.Graph.svg('rect')
-				.attr('width', 100)
-				.attr('height', 10)
-				.attr('style', 'stroke: #000; fill: #fff')
-				.attr('title', node.data.label);
-	} 
-	else {
-		return Viva.Graph.svg('ellipse')
-				.attr('rx', 100)
-				.attr('ry', 10)
-				.attr('style', 'stroke: #000; fill: #fff')
-				.attr('title', node.data.label);
+	if(labelsvis){ // show only labels
+		return	Viva.Graph.svg('text')
+				// .attr('width', 200)
+				// .attr('height', 10)
+				.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
+				.text(node.data.label);
 	}
+	else {
+		if (node.data.type == 'literal') {
+			return Viva.Graph.svg('rect')
+					.attr('width', 100)
+					.attr('height', 10)
+					.attr('style', 'stroke: #000; fill: #fff')
+					.attr('title', node.data.label);
+		} 
+		else {
+			return Viva.Graph.svg('ellipse')
+					.attr('rx', 100)
+					.attr('ry', 10)
+					.attr('style', 'stroke: #000; fill: #fff')
+					.attr('title', node.data.label);
+		}
+	}
+
+
 })
 .placeNode(function(nodeUI, pos){
-	nodeUI.attr('x', pos.x - 50).attr('y', pos.y);
-	nodeUI.attr('cx', pos.x - 50).attr('cy', pos.y);
-	
+	if(labelsvis){ 
+		nodeUI.attr('x', pos.x - 20).attr('y', pos.y);
+	}
+	else {
+		nodeUI.attr('x', pos.x - 50).attr('y', pos.y);
+		nodeUI.attr('cx', pos.x - 50).attr('cy', pos.y);
+	}
 });
 
 graphics.link(function(link) {
 		return Viva.Graph.svg('line')
 				.attr('style', 'stroke: #000; fill: #000')
 				.attr('title', link.data.label);
+		// var g = Viva.Graph.svg('g');
+		// g.append(Viva.Graph.svg('text')
+		// 		.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
+		// 		.text(link.data.label)
+		// );
+		// g.append(Viva.Graph.svg('line')
+		// 		.attr('style', 'stroke: #000; fill: #000')
+		// 		.attr('title', link.data.label)
+		// );
+		// return g;
 });
-
 
 $(document).ready(function(){
 
 	// adjust size of output area
-	$("#out").css('margin-left', $("#in").width() + 10); 
+	$("#out").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
+	$("#out").css('height', $(window).height() * 0.85 );
+
+	$(window).resize(function() {
+		$("#out").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
+		$("#out").css('height', $(window).height() * 0.85 );
+	});
 	
 	// list saved entries
 	buildEntryList();
@@ -79,6 +110,7 @@ $(document).ready(function(){
 		$("#vis").click(function(event){
 			var tinput = $("#tinput").val();
 			$("#out").html("");
+			$("#labels").hide();
 			resetGraph(store);
 			
 			status("Parsing input ...");
@@ -93,7 +125,10 @@ $(document).ready(function(){
 					else{
 						buildGraph(store);
 					}
+					$("#out").show("");
 					renderGraph("out");
+					$("#labels").show();
+					
 				}
 				else {
 					status("<span style='color:red'>Invalid RDF Turtle :(</span>" );
@@ -115,6 +150,22 @@ $(document).ready(function(){
 		});
 		$("#ex1").click(function(event){ $("#tinput").val(ex1); });
 		$("#ex2").click(function(event){ $("#tinput").val(ex2); });
+
+		// handling node/link lables rendering
+		$("#labels").click(function(event){
+			$("#out").html("");
+			if(labelsvis){
+				$("#labels").html("show labels");
+				$("#labels").css("border-left", "0px solid #fafafa");
+				labelsvis = false;
+			}
+			else {
+				$("#labels").html("hide labels");
+				$("#labels").css("border-left", "5px solid #f0f0f0");
+				labelsvis = true;
+			}
+			renderGraph("out");
+		});
 
 		// handling restrictions (via SPARQL query)
 		$("#restrict").click(function(event){ 

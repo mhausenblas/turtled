@@ -61,6 +61,10 @@ img {
 	margin: 0 0 10px 0;
 }
 
+#labels {
+	display: none;
+}
+
 #restrict {
 	font-size: 70%;
 	margin: 20px 0 0 0;
@@ -75,8 +79,8 @@ img {
 #restrictions p {
 	color: #a0a0a0;
 	font-weight: 100;
-	font-size: 70%;
-	margin: 1em 0 1em 0;
+	font-size: 65%;
+	margin: 1em 0 .5em 0;
 	width: 600px;
 }
 
@@ -84,7 +88,7 @@ img {
 	margin: 0 0 0 1em;
 }
 
-#currententry{
+#currententry {
 	text-align: left;
 	font-size: 90%;
 	font-weight: bold;
@@ -114,11 +118,27 @@ img {
 	box-shadow: 1px 1px 5px #909090;
 }
 
-
 #out {
-	width: 100%;
-	text-align: center;
+	position: fixed;
+	right: 10px;
+	top: 50px;
 	cursor: pointer;
+	-webkit-border-radius: 1px;
+	-moz-border-radius: 1px;
+	border-radius: 1px;
+	border: 1px solid #909090;
+	background: #fff;
+	-moz-box-shadow: 1px 1px 5px #909090;
+	-webkit-box-shadow:1px 1px 5px #909090;
+	box-shadow: 1px 1px 5px #909090;
+	display: none;
+}
+
+#out-support {
+	text-align: right;
+	position: fixed;
+	right: 4px;
+	top: 25px;
 }
 
 #ack {

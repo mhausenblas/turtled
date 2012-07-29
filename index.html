@@ -50,8 +50,8 @@
 				<div id="restrict" title="click to show/hide"><img src="img/restrict.png" alt="Restrict" id="img-restrict" />Restrict ...</div>
 				<div id="restrictions">
 					<p>
-						The SPARQL CONSTRUCT query you enter, below, is applied to the RDF Turtle input before rendering.
-						If you're unfamiliar with SPARQL CONSTRUCT queries, have a look at Olaf Hartig's <a href="http://www2.informatik.hu-berlin.de/~hartig/tmp/HartigTutorialICWE12_2.pdf" title="An Introduction to SPARQL and Queries over Linked Data">tutorial</a>.
+						The SPARQL CONSTRUCT below, is applied to the RDF Turtle input before rendering.
+						If you're unfamiliar with SPARQL CONSTRUCT queries, have a look at Olaf Hartig's <a href="http://www2.informatik.hu-berlin.de/~hartig/tmp/HartigTutorialICWE12_2.pdf" target="_new" title="An Introduction to SPARQL and Queries over Linked Data">tutorial</a>.
 					</p>
 					<textarea id="sinput" rows="8" cols="70" title="Enter a valid SPARQL CONSTRUCT query here that will be applied to the input ...">
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -66,8 +66,11 @@ WHERE {
 				</div>
 			</div>
 		</div>
-		<div id="out"></div>
 	</div>
+	<div id="out-support">
+		<span class="ctrl-item" id="labels" title="click to show/hide labels">show labels</span>
+	</div>
+	<div id="out"></div>
 	<div id="ack">
 		<a href="http://deri.ie/" title="Digital Enterprise Research Institute (DERI)"><img src="img/deri-logo.png" alt="DERI" /></a>
 		<a href="http://latc-project.eu/" title="EC FP7 Linked Open Data (LOD) Around-The-Clock Support Action"><img src="img/latc-logo.png" alt="LATC" /></a>
