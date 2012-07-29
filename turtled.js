@@ -103,12 +103,31 @@ $(document).ready(function(){
 		});
 		
 		// handling examples
-		$("#examples").click(function(event){ $('#examples-sel').slideToggle('slow'); });
-		$("#ex1").click(function(event){ $('#tinput').val(ex1); });
-		$("#ex2").click(function(event){ $('#tinput').val(ex2); });
+		$("#examples").click(function(event){
+			$("#examples-sel").slideToggle('slow', function() {
+				if($("#examples-sel").is(":visible")){
+					$("#img-examples").css("border-left", "5px solid #f0f0f0"); 
+				}
+				else{
+					$("#img-examples").css("border", "0px solid #fafafa"); 
+				} 
+			  });
+		});
+		$("#ex1").click(function(event){ $("#tinput").val(ex1); });
+		$("#ex2").click(function(event){ $("#tinput").val(ex2); });
 
 		// handling restrictions (via SPARQL query)
-		$("#restrict").click(function(event){ $('#restrictions').slideToggle('slow'); });
+		$("#restrict").click(function(event){ 
+			$("#restrictions").slideToggle('slow', function() {
+				if($("#restrictions").is(":visible")){
+					$("#restrict").css("border-left", "5px solid #f0f0f0"); 
+				}
+				else{
+					$("#restrict").css("border", "0px solid #fafafa"); 
+				} 
+			  });
+			
+		});
 		
 		// handling entry save and load
 		$("#save").click(function(event){
@@ -212,9 +231,6 @@ function applyRestriction(store, query){
 	});
 }
 
-
-
-
 function renderGraph(containerID){
 	var renderer = Viva.Graph.View.renderer(graph, {
 		graphics: graphics,
@@ -232,8 +248,9 @@ function buildEntryList(){
 	for (var i=0; i < MAX_ENTRIES; i++) {
 		if(turtledstorage.getItem('turtled.net' + i)) {
 			var ename = getCLOB('turtled.net' + i ).name;
-			var timestamp = getCLOB('turtled.net' + i ).timestamp;			
-			$("#entries").append("<span class='entry' title='last updated on " +  timestamp + "' id='turtled.net" + i + "'>" + ename + "</span>");
+			var timestamp = getCLOB('turtled.net' + i ).timestamp;
+			$("#entries").append("<span class='entry' title='last updated on " +  timestamp + "' id='turtled.net" + i + "'><img src='img/entry.png' alt='Saved entry' />" + ename + "</span>");
+			entrycntr = i +  1;
 		}
 	}
 }

@@ -31,6 +31,9 @@ textarea {
 	box-shadow: 1px 1px 10px #303030;
 }
 
+img {
+	vertical-align: middle;
+}
 
 #info {
 	font-size: 50%;
@@ -60,13 +63,21 @@ textarea {
 
 #restrict {
 	font-size: 70%;
-	margin: 0 0 0 .5em;
+	margin: 20px 0 0 0;
 	cursor: pointer;
 }
 
 #restrictions {
 	display: none;
 	margin: 10px 0 0 0;
+}
+
+#restrictions p {
+	color: #a0a0a0;
+	font-weight: 100;
+	font-size: 70%;
+	margin: 1em 0 1em 0;
+	width: 600px;
 }
 
 #entries {
@@ -89,7 +100,7 @@ textarea {
 
 #status {
 	padding: 5px;
-	margin: 2em 0;
+	margin: 10px 0 20px 0;
 	color: #909090;
 	text-align: right;
 	font-size: 60%;

@@ -20,7 +20,7 @@
 	<div id="main">
 		<div id="in">
 			<div id="in-support">
-				<span class="ctrl-item" id="examples" title="click to show/hide">Examples ...</span>
+				<span class="ctrl-item" id="examples" title="click to show/hide"><img src="img/examples.png" alt="Examples" id="img-examples" /> Examples ...</span>
 				<span class="ctrl-item"><a href="http://groups.csail.mit.edu/haystack/blog/2008/11/06/a-quick-tutorial-on-the-tutrle-rdf-serialization/" target="_new" title="A Quick Tutorial on the Turtle RDF Serialization">Turtle tutorial ...</a></span>
 				<span class="ctrl-item"><a href="http://prefix.cc/" target="_new" title="namespace lookup for RDF developers">Prefixes ...</a></span>
 			</div>
@@ -31,7 +31,7 @@
 			</div>
 			
 			<div id="currententry"></div>
-			<textarea id="tinput" rows="17" cols="70" title="Enter some valid RDF Turtle here and hit the 'Visualise!' button below ...">
+			<textarea id="tinput" rows="15" cols="70" title="Enter some valid RDF Turtle here and hit the 'Visualise!' button below ...">
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
@@ -43,19 +43,27 @@
    rdfs:label "a thing" ;
 .
 </textarea>
+			<div id="status">Status: waiting for user input</div>
 			<div id="in-ctrl">
-				<button id="vis">Visualise!</button> <span id="restrict" title="click to show/hide">Restrict ...</span>
+				<button id="vis">Visualise!</button>
+				<button id="save">Save ...</button><span id="entries"></span>
+				<div id="restrict" title="click to show/hide"><img src="img/restrict.png" alt="Restrict" id="img-restrict" />Restrict ...</div>
 				<div id="restrictions">
-					<textarea id="sinput" rows="10" cols="70" title="Enter a valid SPARQL CONSTRUCT query here that will be applied to the input ...">
-CONSTRUCT { <http://example.org/#x> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o }
-WHERE { <http://example.org/#x> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o  }
+					<p>
+						The SPARQL CONSTRUCT query you enter, below, is applied to the RDF Turtle input before rendering.
+						If you're unfamiliar with SPARQL CONSTRUCT queries, have a look at Olaf Hartig's <a href="http://www2.informatik.hu-berlin.de/~hartig/tmp/HartigTutorialICWE12_2.pdf" title="An Introduction to SPARQL and Queries over Linked Data">tutorial</a>.
+					</p>
+					<textarea id="sinput" rows="8" cols="70" title="Enter a valid SPARQL CONSTRUCT query here that will be applied to the input ...">
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT {
+ <http://example.org/#x> rdf:type ?o .
+}
+WHERE {
+ <http://example.org/#x> rdf:type ?o .
+}
 					</textarea>
 				</div>
-				<div>
-					<button id="save">Save ...</button>
-					<span id="entries"></span>
-				</div>
-				<div id="status">Status: waiting for user input</div>
 			</div>
 		</div>
 		<div id="out"></div>
