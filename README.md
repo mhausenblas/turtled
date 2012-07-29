@@ -15,9 +15,9 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Open Issues
 
-* proper credit (DERI, etc)
 * SVG export
-* arrows, ltr layout, resize
+* labels for links
+* arrows, ltr layout
 
 ## License and Acknowledgements
 
