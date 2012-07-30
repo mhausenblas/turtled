@@ -35,6 +35,11 @@ img {
 	vertical-align: middle;
 }
 
+svg {
+	width: 100%;
+	height: 100%;
+}
+
 #info {
 	font-size: 50%;
 	text-align: left;
