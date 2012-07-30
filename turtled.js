@@ -35,7 +35,6 @@ var ex2 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
 .';
 
 
-
 // node.data holds custom object passed to graph.addNode();
 graphics.node(function(node) {
 	if(labelsvis){ // show only labels
@@ -138,10 +137,12 @@ $(document).ready(function(){
 		});
 		
 		// handling examples
-		$("#examples").click(function(event){
-			$("#examples-sel").slideToggle('slow', function() {
+		$("#examples").click(function(event) {
+			$("#examples-sel").slideToggle('medium', function() {
 				if($("#examples-sel").is(":visible")){
 					$("#img-examples").css("border-left", "5px solid #f0f0f0"); 
+					$("#currententry").hide();
+					status("Examples gallery loaded.");
 				}
 				else{
 					$("#img-examples").css("border", "0px solid #fafafa"); 
@@ -218,6 +219,9 @@ $(document).ready(function(){
 			var rdfturtle = getCLOB($(this).attr('id')).payload;
 			$("#tinput").val(rdfturtle); 
 			$("#currententry").html(ename + " <button id='delete' title='" + $(this).attr('id') + "'>Delete!</button>");
+			$("#examples-sel").slideUp("fast");
+			$("#img-examples").css("border", "0px solid #fafafa"); 
+			$("#currententry").slideDown("medium");
 		});
 		
 		$("#delete").live('click', function(event){
