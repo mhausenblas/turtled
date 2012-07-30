@@ -1,6 +1,7 @@
 # turtled
 
-A simple online RDF Turtle editor.
+A simple online RDF Turtle editor that allows you to render an RDF graph visually, restrict to sub-graphs via SPARQL and to export the visualisation as SVG.
+If you fancy, you can watch a [5min screen cast](http://www.youtube.com/watch?v=LRtJAUdASsE) that introduces Turtled and shows how to use it.
 
 ![Screen shot of turtled v0.0 in action](https://github.com/mhausenblas/turtled/raw/master/doc/turtled-screen-shot-v00.png "Screen shot of turtled v0.0 in action")
 
