@@ -4,36 +4,9 @@ var turtledstorage = window.localStorage;
 var MAX_ENTRIES = 10;
 var entrycntr = 0;
 var labelsvis = false;
-var gstats = { numtriples : 0 ,  numclasses : 0 };
+var gstats = { numtriples : 0, numentities : 0,  numclasses : 0 };
 
-var ex1 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\
-@prefix : <http://example.org/#> .\n\
-\n\
-:m a foaf:Person ;\n\
-    rdfs:label "Michael" ;\n\
-    foaf:knows :r ;\n\
-.\n\
-\n\
-:r a foaf:Person ;\n\
-   rdfs:label "Richard" ;\n\
-.';
 
-var ex2 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\
-@prefix dc: <http://purl.org/dc/elements/1.1/> .\n\
-@prefix schema: <http://schema.org/> .\n\
-@prefix : <http://example.org/#> .\n\
-\n\
-:m a foaf:Person ;\n\
-    rdfs:label "Michael" ;\n\
-    dc:author :p ;\n\
-.\n\
-\n\
-:p a schema:ScholarlyArticle ;\n\
-   rdfs:label "A very important lesson learned ..." ;\n\
-   dc:created "2011-11-11" ;\n\
-.';
 
 
 // node.data holds custom object passed to graph.addNode();
@@ -100,7 +73,7 @@ $(document).ready(function(){
 		$("#out").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
 		$("#out").css('height', $(window).height() * 0.85 );
 	});
-	
+		
 	// list saved entries
 	buildEntryList();
 
@@ -129,9 +102,7 @@ $(document).ready(function(){
 					$("#out").show("");
 					renderGraph("out");
 					$("#out-support").show();
-					// @@TODO: count distinct subjects, classes, properties
-					$("#stats").html("<strong>Stats:</strong> Triples: " + gstats.numtriples );
-					
+					showStats(store);
 				}
 				else {
 					status("<span style='color:red'>Invalid RDF Turtle :(</span>" );
@@ -155,18 +126,17 @@ $(document).ready(function(){
 		});
 		$("#ex1").click(function(event){ $("#tinput").val(ex1); });
 		$("#ex2").click(function(event){ $("#tinput").val(ex2); });
+		$("#ex3").click(function(event){ $("#tinput").val(ex3); });
 
 		// handling output support (node/link lables rendering, SVG export)
 		$("#labels").click(function(event){
 			$("#out").html("");
 			if(labelsvis){
-				$("#labels").html("show labels");
-				$("#labels").css("border-left", "0px solid #fafafa");
+				$("#labels").html("hidden");
 				labelsvis = false;
 			}
 			else {
-				$("#labels").html("hide labels");
-				$("#labels").css("border-left", "5px solid #f0f0f0");
+				$("#labels").html("visible");
 				labelsvis = true;
 			}
 			renderGraph("out");
@@ -312,6 +282,23 @@ function renderGraph(containerID){
 	renderer.run();
 }
 
+function showStats(store){
+	// @@TODO: count distinct subjects, classes, properties
+		
+	$("#stats").html("<strong>Stats:</strong> " + gstats.numtriples + " triple(s)");
+
+	store.execute("SELECT (COUNT(DISTINCT ?class) AS ?classcount) { ?s a ?class . }", function(success, results){
+		gstats.numclasses = results[0].classcount.value;
+		store.execute("SELECT (COUNT(DISTINCT ?s) AS ?subjectcount) { ?s ?p ?o. }", function(success, results){
+			gstats.numentities = results[0].subjectcount.value;
+			$("#stats").html("<strong>Stats:</strong> " +
+							gstats.numtriples  + ( gstats.numtriples > 1 ? " triples, " : " triple, " ) +
+							gstats.numentities + ( gstats.numentities > 1 ? " entities, " : " entity, " ) +
+							gstats.numclasses + ( gstats.numclasses > 1 ? " types. " : " type. " )  
+			);
+		});
+	});
+}
 
 // low-level storage API
 
