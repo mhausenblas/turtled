@@ -61,6 +61,12 @@ img {
 	margin: 0 0 10px 0;
 }
 
+#stats {
+	padding: 0 10px 0 10px;
+	font-size: 60%;
+	color: #606060;
+}
+
 #labels {
 
 }

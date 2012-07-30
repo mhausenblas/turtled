@@ -4,6 +4,7 @@ var turtledstorage = window.localStorage;
 var MAX_ENTRIES = 10;
 var entrycntr = 0;
 var labelsvis = false;
+var gstats = { numtriples : 0 ,  numclasses : 0 };
 
 var ex1 = '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\
@@ -117,6 +118,7 @@ $(document).ready(function(){
 			// try parsing the user-supplied input and if successful, build the graph and render it
 			store.load("text/turtle", tinput, function(success, results) {
 				if(success){
+					gstats.numtriples = results;
 					status("Valid RDF Turtle. Loaded <strong>" + results + "</strong> triples.");
 					if($("#restrictions").is(":visible")){
 						applyRestriction(store, $("#sinput").val());
@@ -127,6 +129,8 @@ $(document).ready(function(){
 					$("#out").show("");
 					renderGraph("out");
 					$("#out-support").show();
+					// @@TODO: count distinct subjects, classes, properties
+					$("#stats").html("<strong>Stats:</strong> Triples: " + gstats.numtriples );
 					
 				}
 				else {
