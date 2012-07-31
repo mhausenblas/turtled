@@ -228,9 +228,20 @@ $(document).ready(function(){
 		$("#svgexport").click(function(event){
 			var basesvg = $("#out").html();
 			var header = '<?xml version="1.0" encoding="UTF-8"?>\n\
- <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">';
-			var svgcontent = header + '\n  ' + basesvg.substring(basesvg.indexOf('<svg>') + '<svg>'.length);
-			$("body").prepend("<div class='svgout'><button id='closesvgout'>Close</button><div><textarea rows='20' cols='80'>\n" + svgcontent + "</textarea></div></div>");
+ <svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">';
+			var svglegend = "<g><text style='stroke-width: 0.3; font-family: Arial; font-size: 60%; stroke: #303030;' x='20' y='20'>Prefixes</text>";
+			var legendy = 40;
+			var svgcontent = header + '\n  ';
+			
+			for (var i=0; i < usedPrefixes.length; i++) {
+				svglegend += "<text style='stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;' x='20' y='" + legendy + "'>" + usedPrefixes[i] + ": ..." + prefixes2URIs[usedPrefixes[i]] + "</text>";
+				legendy += 10;
+			}
+			svglegend += "</g>";
+			svgcontent += svglegend + '\n  ' + basesvg.substring(basesvg.indexOf('<svg>') + '<svg>'.length);
+			
+			$('.svgout').remove();
+			$("body").prepend("<div class='svgout'><div><button id='closesvgout'>Close</button></div><div><textarea rows='30' cols='80'>\n" + svgcontent + "</textarea></div></div>");
 		});
 		
 		$("#closesvgout").live('click', function(event){
@@ -413,7 +424,6 @@ function loadPrefixes(){
 	});
 }
 
-
 // takes a URI and creates a shortened version ala prefix:rest, 
 // if a prefix can be found, otherwise the original URI is returned
 // for example: http://schema.org/Thing -> schema:Thing
@@ -442,7 +452,6 @@ function lookupPrefix4URI(URI){
 		else return URI;
 	}
 }
-
 
 function buildPrefixList(store){
 	store.execute("SELECT * WHERE { ?s ?p ?o } ", function(success, results){

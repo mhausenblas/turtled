@@ -19,7 +19,6 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ### v0.1
 
-* add prefix legend to SVG export
 * fix bug re too long label text when no prefix matches
 
 ### v0.2
