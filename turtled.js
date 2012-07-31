@@ -374,10 +374,18 @@ function applyRestriction(store, query){
 }
 
 function renderGraph(containerID){
+	var layout = Viva.Graph.Layout.forceDirected(graph, {
+	    springLength : 200,
+	    springCoeff : 0.0015,
+	    dragCoeff : 0.02,
+	    gravity : -3
+	});
+	
 	var renderer = Viva.Graph.View.renderer(graph, {
 		graphics: graphics,
 		renderLinks: true,
-		container: document.getElementById(containerID)
+		container: document.getElementById(containerID),
+		layout : layout
 	});
 	renderer.run();	
 }

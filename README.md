@@ -25,6 +25,7 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 ### v0.2
 
 * support custom prefixes
+* make gravity, springLength and coeff customizable
 * arrows, ltr layout
 
 ## License and Acknowledgements
