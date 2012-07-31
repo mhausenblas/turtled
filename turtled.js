@@ -1,70 +1,103 @@
+// CONFIGURATION
+var MAX_ENTRIES = 10; // number of entries that a user can save via local Web storage
+var DISPLAY_LENGTH_LITERAL = 15; // max. length of a literal label that will be displayed
+var DISPLAY_LENGTH_NODE = 30; // max. length of a node label that will be displayed
+
+// internal stuff, do not touch
 var graph = Viva.Graph.graph();
 var graphics = Viva.Graph.View.svgGraphics();
 var turtledstorage = window.localStorage;
-var MAX_ENTRIES = 10;
 var entrycntr = 0;
 var labelsvis = false;
 var gstats = { numtriples : 0, numentities : 0,  numclasses : 0 };
 var URIs2prefixes = {};
 
-// node.data holds custom object passed to graph.addNode();
+// rendering of nodes and properties
 graphics.node(function(node) {
-	if(labelsvis){ // show only labels
-		var l = "";
-		if($('#useprefixes').is(':checked') && node.data.type != 'literal'){
-			l = lookupPrefix4URI(node.data.label);
-		}
-		else {
-			l = node.data.label;
-		}
-		
-		if (node.data.type == 'literal') {
-			l = '"' + l + '"';
+	var l = node.data.label;
+	var d = l;
+	var g = Viva.Graph.svg('g');
+	var ellipseRX = 95; // defaults for ...
+	var ellipseRY = 15; // use-prefix rendering mode
+	
+	if($('#useprefixes').is(':checked')){ // user prefers to use prefixes for display
+		if(node.data.type != 'literal') { // we have a URI, try to create a short label via prefix
+			d = lookupPrefix4URI(node.data.label);	
 		} 
-		
-		return	Viva.Graph.svg('text')
-				// .attr('width', 200)
-				// .attr('height', 10)
-				.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
-				.text(l);
 	}
 	else {
+		ellipseRX = 120;
+	}
+	
+	if(labelsvis){ // only lines - show only labels
 		if (node.data.type == 'literal') {
-			return Viva.Graph.svg('rect')
-					.attr('width', 100)
-					.attr('height', 10)
+			d = '"' + d + '"';
+		}
+		return	Viva.Graph.svg('text')
+				.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
+				.text(d);
+	}
+	else { // ellipses and rects
+		if (node.data.type == 'literal') {
+			// make it fit in the place available
+			if(d.length > DISPLAY_LENGTH_LITERAL){
+				d = d.substring(0, DISPLAY_LENGTH_LITERAL) + " ...";
+			}
+			g.append(Viva.Graph.svg('rect')
+					.attr('width', 130)
+					.attr('height', 20)
 					.attr('style', 'stroke: #000; fill: #fff')
-					.attr('title', node.data.label);
+					.attr('title', l));
+			g.append(Viva.Graph.svg('text')
+					.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
+					.attr('title', l)
+					.text(d));
 		} 
 		else {
-			return Viva.Graph.svg('ellipse')
-					.attr('rx', 100)
-					.attr('ry', 10)
+			// make it fit in the place available
+			if(d.length > DISPLAY_LENGTH_NODE){
+				d = d.substring(0, DISPLAY_LENGTH_NODE) + " ...";
+			}
+			g.append(Viva.Graph.svg('ellipse')
+					.attr('rx', ellipseRX)
+					.attr('ry', ellipseRY)
 					.attr('style', 'stroke: #000; fill: #fff')
-					.attr('title', node.data.label);
+					.attr('title', l));
+			g.append(Viva.Graph.svg('text')
+					.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
+					.attr('title', l)
+					.text(d));
 		}
+		return g;
 	}
-
-
 })
 .placeNode(function(nodeUI, pos){
-	if(labelsvis){ 
+	if(labelsvis){ // only lines
 		nodeUI.attr('x', pos.x - 20).attr('y', pos.y);
 	}
-	else {
-		nodeUI.attr('x', pos.x - 50).attr('y', pos.y);
-		nodeUI.attr('cx', pos.x - 50).attr('cy', pos.y);
+	else { // ellipses and rects
+		for (var i=0; i < nodeUI.childNodes.length; i++) {
+			// console.log("dealing with a " + nodeUI.childNodes[i].constructor.name);
+			if(nodeUI.childNodes[i] instanceof SVGTextElement){
+				nodeUI.childNodes[i].attr('x', pos.x - 40).attr('y', pos.y + 15);
+			}
+			if(nodeUI.childNodes[i] instanceof SVGRectElement){
+				nodeUI.childNodes[i].attr('x', pos.x - 50).attr('y', pos.y);
+			}
+			if(nodeUI.childNodes[i] instanceof SVGEllipseElement){
+				if($('#useprefixes').is(':checked')){
+					nodeUI.childNodes[i].attr('cx', pos.x + 20).attr('cy', pos.y + 10);
+					
+				}
+				else {
+					nodeUI.childNodes[i].attr('cx', pos.x + 50).attr('cy', pos.y + 10);
+				}
+			}
+		}
 	}
 });
 
 graphics.link(function(link) {
-	// var l = "";
-	// if($('#useprefixes').is(':checked')){
-	// 	l = lookupPrefix4URI(link.data.label);
-	// }
-	// else {
-	// 	l = link.data.label;
-	// }
 	return Viva.Graph.svg('line')
 			.attr('style', 'stroke: #000; fill: #000')
 			.attr('title', link.data.label);
@@ -152,11 +185,11 @@ $(document).ready(function(){
 		$("#labels").click(function(event){
 			$("#out").html("");
 			if(labelsvis){
-				$("#labels").html("hidden");
+				$("#labels").html("full");
 				labelsvis = false;
 			}
 			else {
-				$("#labels").html("visible");
+				$("#labels").html("plain");
 				labelsvis = true;
 			}
 			renderGraph("out");
@@ -237,6 +270,10 @@ $(document).ready(function(){
 		});
 	
 		// handling of selected node and arc display
+		$("text").live('click', function(event){
+			status("You've selected the resource: <span style='color:blue'>" +  lookupPrefix4URI($(this).attr('title')) + "</span>" );
+		});
+
 		$("ellipse").live('click', function(event){
 			if($('#useprefixes').is(':checked')){
 				status("You've selected the resource: <span style='color:blue'>" +  lookupPrefix4URI($(this).attr('title')) + "</span>" );
