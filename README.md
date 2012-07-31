@@ -19,6 +19,7 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 * add legend for prefixes based on usage
 * labels for links
+* support custom prefixes
 * arrows, ltr layout
 
 ## License and Acknowledgements
