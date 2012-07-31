@@ -15,9 +15,9 @@ Turtled depends on the following JS libraries (in addition to jQuery), all inclu
 
 In order to deploy it, simply copy all files into a directory. An example deployment is available at [turtled.net](http://turtled.net/).
 
-## Open Issues
+## Release v0.1 planning
 
-* add legend for prefixes based on usage
+* add prefix legend to SVG export
 * labels for links
 * support custom prefixes
 * arrows, ltr layout

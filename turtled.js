@@ -11,6 +11,7 @@ var entrycntr = 0;
 var labelsvis = false;
 var gstats = { numtriples : 0, numentities : 0,  numclasses : 0 };
 var URIs2prefixes = {};
+var usedPrefixes = [];
 
 // rendering of nodes and properties
 graphics.node(function(node) {
@@ -93,6 +94,7 @@ graphics.node(function(node) {
 					nodeUI.childNodes[i].attr('cx', pos.x + 50).attr('cy', pos.y + 10);
 				}
 			}
+			
 		}
 	}
 });
@@ -198,6 +200,10 @@ $(document).ready(function(){
 		$("#useprefixes").click(function(event){
 			$("#out").html("");
 			renderGraph("out");
+			
+			if($('#useprefixes').is(':checked')) $("#prefixesused").show();
+			else $("#prefixesused").hide();
+			
 		});
 
 		$("#svgexport").click(function(event){
@@ -309,13 +315,16 @@ function resetGraph(store){
 }
 
 function buildGraph(store){
-	store.execute("SELECT * { ?s ?p ?o }", function(success, results){
+	store.execute("SELECT * WHERE { ?s ?p ?o }", function(success, results){
 		if(success) {
 			for (var i=0; i < results.length; i++) {
 				graph.addNode(results[i].s.value, { label : results[i].s.value, type : results[i].s.token });
 				graph.addNode(results[i].o.value, { label : results[i].o.value, type : results[i].o.token }); 
 				graph.addLink(results[i].s.value, results[i].o.value, { label : results[i].p.value });
 			};
+			if($('#useprefixes').is(':checked')){
+				buildPrefixList(store);
+			}
 			status("Successfully built the graph.");
 		}
 		else {
@@ -328,7 +337,7 @@ function applyRestriction(store, query){
 	store.execute(query, function(success, g){
 		store.insert(g, "http://turtled.net/restrictions#", function(success) {
 			var namedGraphs  = ["http://turtled.net/restrictions#"];
-			store.executeWithEnvironment("SELECT * { ?s ?p ?o }", namedGraphs, namedGraphs, function(success, results){
+			store.executeWithEnvironment("SELECT * WHERE { ?s ?p ?o }", namedGraphs, namedGraphs, function(success, results){
 				if(success) {
 					for (var i=0; i < results.length; i++) {
 						graph.addNode(results[i].s.value, { label : results[i].s.value, type : results[i].s.token });
@@ -351,7 +360,7 @@ function renderGraph(containerID){
 		renderLinks: true,
 		container: document.getElementById(containerID)
 	});
-	renderer.run();
+	renderer.run();	
 }
 
 function showStats(store){
@@ -377,6 +386,10 @@ function loadPrefixes(){
 	});
 }
 
+
+// takes a URI and creates a shortened version ala prefix:rest, 
+// if a prefix can be found, otherwise the original URI is returned
+// for example: http://schema.org/Thing -> schema:Thing
 function lookupPrefix4URI(URI){
 	var candidate = "";
 	
@@ -394,6 +407,65 @@ function lookupPrefix4URI(URI){
 			candidate = URI.substring(0, URI.lastIndexOf("/") + 1);
 			if(URIs2prefixes[candidate]){
 				return URIs2prefixes[candidate] + ":" + URI.substring(URI.lastIndexOf("/") + 1);
+			}
+			else {
+				return URI;
+			}
+		}
+		else return URI;
+	}
+}
+
+
+function buildPrefixList(store){
+	store.execute("SELECT * WHERE { ?s ?p ?o } ", function(success, results){
+		if(success) {
+			$("#prefixesused").html("<h4>Prefixes</h4>");
+			$("#prefixesused").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
+			for (var i=0; i < results.length; i++) {
+				if (results[i].s.token == "uri") { // inspect subject for new prefix
+					extendUsedPrefixes(results[i].s.value);
+				}
+				if (results[i].o.token == "uri") { // inspect object for new prefix
+					extendUsedPrefixes(results[i].o.value);
+				}
+				// inspect predicate for new prefix
+				extendUsedPrefixes(results[i].p.value);
+			}
+			if($('#useprefixes').is(':checked')) $("#prefixesused").show();
+		}
+	});
+}
+
+function extendUsedPrefixes(URI){
+	var prefix = getPrefix(URI);
+	if((prefix !== URI) && ($.inArray(prefix, usedPrefixes) == -1)) { // a prefix has been matched and not yet added
+		usedPrefixes.push(prefix);
+		$("#prefixesused").append("<a href='" + prefixes2URIs[prefix] + "' target='_new'>"+ prefix + ":</a> ");
+		// console.log("added " + prefix );
+	}
+}
+
+// takes a URI and returns the namespace prefix,
+// if a prefix can be found, otherwise the original URI is returned
+// for example: http://schema.org/Thing -> schema
+function getPrefix(URI){
+	var candidate = "";
+	
+	if(URI.indexOf("#") !=  -1){ // we have a hash URI
+		candidate = URI.substring(0, URI.indexOf("#") + 1);
+		if(URIs2prefixes[candidate]){
+			return URIs2prefixes[candidate];
+		}
+		else {
+			return URI;
+		}
+	}
+	else {
+		if(URI.indexOf("/") !=  -1){ // we have a slash URI
+			candidate = URI.substring(0, URI.lastIndexOf("/") + 1);
+			if(URIs2prefixes[candidate]){
+				return URIs2prefixes[candidate];
 			}
 			else {
 				return URI;
