@@ -22,12 +22,15 @@ graphics.node(function(node) {
 	var ellipseRY = 15; // use-prefix rendering mode
 	
 	if($('#useprefixes').is(':checked')){ // user prefers to use prefixes for display
-		if(node.data.type != 'literal') { // we have a URI, try to create a short label via prefix
-			d = lookupPrefix4URI(node.data.label);	
+		if(node.data.type == 'uri') { // we have a URI, try to create a short label via prefix
+			d = lookupPrefix4URI(l);
+			if (d == l) { // prefix lookup was unsuccessful 
+				ellipseRX = 150;
+			}
 		} 
 	}
 	else {
-		ellipseRX = 120;
+		ellipseRX = 150;
 	}
 	
 	if(labelsvis){ // only lines - show only labels

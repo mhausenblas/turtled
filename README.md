@@ -19,7 +19,7 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ### v0.1
 
-* fix bug re too long label text when no prefix matches
+Released on 2012-07-31.
 
 ### v0.2
 
