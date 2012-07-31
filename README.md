@@ -3,11 +3,11 @@
 A simple online RDF Turtle editor that allows you to render an RDF graph visually, restrict to sub-graphs via SPARQL and to export the visualisation as SVG.
 If you fancy, you can watch a [5min screen cast](http://www.youtube.com/watch?v=LRtJAUdASsE) that introduces Turtled and shows how to use it.
 
-![Screen shot of turtled v0.0 in action](https://github.com/mhausenblas/turtled/raw/master/doc/turtled-screen-shot-v00.png "Screen shot of turtled v0.0 in action")
+![Screen shot of turtled v0.1 in action](https://github.com/mhausenblas/turtled/raw/master/doc/turtled-screen-shot-v01.png "Screen shot of turtled v0.1 in action")
 
 ## Dependencies and Installation
 
-Turtled depends on the following JS libraries (in addition to jQuery), all included in the repo:
+Turtled depends on the following JS libraries and data source (in addition to jQuery), all included in the repo:
 
 * To handle RDF: [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js)
 * For visualisation: [VivaGraph.JS](https://github.com/anvaka/VivaGraphJS)
@@ -17,9 +17,6 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ## Release planning
 
-### v0.1
-
-Released on 2012-07-31.
 
 ### v0.2
 
@@ -27,6 +24,16 @@ Released on 2012-07-31.
 * make gravity, springLength and coeff customizable
 * add arrows to arcs
 * ltr layout (subject - key/value)
+
+
+### v0.1
+
+Released on 2012-07-31.
+
+### v0.0
+
+Initial released on 2012-07-27.
+
 
 ## License and Acknowledgements
 
