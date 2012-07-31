@@ -67,7 +67,11 @@ svg {
 }
 
 #stats {
-	padding: 0 30px 0 40px;
+	padding: 0 20px 0 30px;
+}
+
+#prefixes{
+	padding: 0 10px 0 10px;
 }
 
 #labels {
@@ -79,6 +83,7 @@ svg {
 	-webkit-box-shadow:1px 1px 5px #909090;
 	box-shadow: 1px 1px 5px #909090;
 	color: #303030;
+	font-size: 100%;
 }
 
 #restrict {

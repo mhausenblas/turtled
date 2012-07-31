@@ -8,7 +8,7 @@
 <body>
 	<div id="info">
 		Contact: <a href="http://github.com/mhausenblas/">Michael Hausenblas</a> |
-		Last update: 2012-07-30 | 
+		Last update: 2012-07-31 | 
 		Source: <a href="http://github.com/mhausenblas/turtled">GitHub repo</a> |
 		v0.0
 	</div>
@@ -72,7 +72,7 @@ WHERE {
 	<div id="out-support">
 		<button id="svgexport">Export SVG ...</button>
 		<span id="stats" title="Overall RDF Turtle statistics"></span>
-		<strong>Labels:</strong> <span class="ctrl-item" id="labels" title="click to show/hide labels">hidden</span>
+		<strong>Labels:</strong><span id="prefixes"><input id="useprefixes" type="checkbox" checked="checked" /> use prefixes</span> <span class="ctrl-item" id="labels" title="click to show/hide labels">hidden</span>
 	</div>
 	<div id="out"></div>
 	<div id="ack">
@@ -85,6 +85,7 @@ WHERE {
 	<script src="rdf_store_min.js"></script>
 	<script src="json2.js"></script>
 	<script src="examples.js"></script>
+	<script src="prefixes.js"></script>	
 	<script src="turtled.js"></script>
 </body>
 </html>

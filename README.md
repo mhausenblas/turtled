@@ -7,18 +7,20 @@ If you fancy, you can watch a [5min screen cast](http://www.youtube.com/watch?v=
 
 ## Dependencies and Installation
 
-turtled depends on the following JS libraries (in addition to jQuery), all included in the repo:
+Turtled depends on the following JS libraries (in addition to jQuery), all included in the repo:
 
-* [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js)
-* [VivaGraph.JS](https://github.com/anvaka/VivaGraphJS)
+* To handle RDF: [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js)
+* For visualisation: [VivaGraph.JS](https://github.com/anvaka/VivaGraphJS)
+* For prefix lookup: [prefix.cc](http://prefix.cc/)
 
 In order to deploy it, simply copy all files into a directory. An example deployment is available at [turtled.net](http://turtled.net/).
 
 ## Open Issues
 
+* add legend for prefixes based on usage
 * labels for links
 * arrows, ltr layout
 
 ## License and Acknowledgements
 
-The software provided here is in the public domain. Kudos go out to [Richard Cyganiak](https://github.com/cygri) who had the original idea and to all the wonderful people who spent their time making jQuery, rdfstore-js and VivaGraph.JS so useable, useful and awesome - especially a shout out to [Antonio Garrote](https://github.com/antoniogarrote) who provided excellent first-level support for his library.
+The software provided here is in the public domain. Kudos go out to [Richard Cyganiak](https://github.com/cygri) who had the original idea (as well as maintains prefix.cc) and to all the wonderful people who spent their time making jQuery, rdfstore-js and VivaGraph.JS so useable, useful and awesome - especially a shout out to [Antonio Garrote](https://github.com/antoniogarrote) who provided excellent first-level support for his library.

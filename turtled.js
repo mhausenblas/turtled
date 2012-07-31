@@ -5,18 +5,28 @@ var MAX_ENTRIES = 10;
 var entrycntr = 0;
 var labelsvis = false;
 var gstats = { numtriples : 0, numentities : 0,  numclasses : 0 };
-
-
-
+var URIs2prefixes = {};
 
 // node.data holds custom object passed to graph.addNode();
 graphics.node(function(node) {
 	if(labelsvis){ // show only labels
+		var l = "";
+		if($('#useprefixes').is(':checked') && node.data.type != 'literal'){
+			l = lookupPrefix4URI(node.data.label);
+		}
+		else {
+			l = node.data.label;
+		}
+		
+		if (node.data.type == 'literal') {
+			l = '"' + l + '"';
+		} 
+		
 		return	Viva.Graph.svg('text')
 				// .attr('width', 200)
 				// .attr('height', 10)
 				.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
-				.text(node.data.label);
+				.text(l);
 	}
 	else {
 		if (node.data.type == 'literal') {
@@ -48,9 +58,16 @@ graphics.node(function(node) {
 });
 
 graphics.link(function(link) {
-		return Viva.Graph.svg('line')
-				.attr('style', 'stroke: #000; fill: #000')
-				.attr('title', link.data.label);
+	// var l = "";
+	// if($('#useprefixes').is(':checked')){
+	// 	l = lookupPrefix4URI(link.data.label);
+	// }
+	// else {
+	// 	l = link.data.label;
+	// }
+	return Viva.Graph.svg('line')
+			.attr('style', 'stroke: #000; fill: #000')
+			.attr('title', link.data.label);
 		// var g = Viva.Graph.svg('g');
 		// g.append(Viva.Graph.svg('text')
 		// 		.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
@@ -65,6 +82,9 @@ graphics.link(function(link) {
 
 $(document).ready(function(){
 
+	// make sure we have the URI-to-prefix mapping handy when needed
+	loadPrefixes();
+	
 	// adjust size of output area
 	$("#out").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
 	$("#out").css('height', $(window).height() * 0.85 );
@@ -142,6 +162,11 @@ $(document).ready(function(){
 			renderGraph("out");
 		});
 
+		$("#useprefixes").click(function(event){
+			$("#out").html("");
+			renderGraph("out");
+		});
+
 		$("#svgexport").click(function(event){
 			var basesvg = $("#out").html();
 			var header = '<?xml version="1.0" encoding="UTF-8"?>\n\
@@ -213,7 +238,12 @@ $(document).ready(function(){
 	
 		// handling of selected node and arc display
 		$("ellipse").live('click', function(event){
-			status("You've selected the resource: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
+			if($('#useprefixes').is(':checked')){
+				status("You've selected the resource: <span style='color:blue'>" +  lookupPrefix4URI($(this).attr('title')) + "</span>" );
+			}
+			else {
+				status("You've selected the resource: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
+			}
 		});
 		
 		$("rect").live('click', function(event){
@@ -221,7 +251,12 @@ $(document).ready(function(){
 		});
 
 		$("line").live('click', function(event){
-			status("You've selected the property: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
+			if($('#useprefixes').is(':checked')){
+				status("You've selected the property: <span style='color:blue'>" +  lookupPrefix4URI($(this).attr('title')) + "</span>" );
+			}
+			else {
+				status("You've selected the property: <span style='color:blue'>" +  $(this).attr('title') + "</span>" );
+			}
 		});
 		
 	});
@@ -283,8 +318,6 @@ function renderGraph(containerID){
 }
 
 function showStats(store){
-	// @@TODO: count distinct subjects, classes, properties
-		
 	$("#stats").html("<strong>Stats:</strong> " + gstats.numtriples + " triple(s)");
 
 	store.execute("SELECT (COUNT(DISTINCT ?class) AS ?classcount) { ?s a ?class . }", function(success, results){
@@ -300,8 +333,41 @@ function showStats(store){
 	});
 }
 
-// low-level storage API
+// prefixes
+function loadPrefixes(){
+	$.each(prefixes2URIs, function(key, val) {
+		URIs2prefixes[val] = key;
+	});
+}
 
+function lookupPrefix4URI(URI){
+	var candidate = "";
+	
+	if(URI.indexOf("#") !=  -1){ // we have a hash URI
+		candidate = URI.substring(0, URI.indexOf("#") + 1);
+		if(URIs2prefixes[candidate]){
+			return URIs2prefixes[candidate] + ":" + URI.substring(URI.lastIndexOf("#") + 1);
+		}
+		else {
+			return URI;
+		}
+	}
+	else {
+		if(URI.indexOf("/") !=  -1){ // we have a slash URI
+			candidate = URI.substring(0, URI.lastIndexOf("/") + 1);
+			if(URIs2prefixes[candidate]){
+				return URIs2prefixes[candidate] + ":" + URI.substring(URI.lastIndexOf("/") + 1);
+			}
+			else {
+				return URI;
+			}
+		}
+		else return URI;
+	}
+}
+
+
+// low-level storage API
 function buildEntryList(){
 	$("#entries").html("");
 	for (var i=0; i < MAX_ENTRIES; i++) {
