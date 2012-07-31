@@ -100,20 +100,39 @@ graphics.node(function(node) {
 });
 
 graphics.link(function(link) {
-	return Viva.Graph.svg('line')
-			.attr('style', 'stroke: #000; fill: #000')
-			.attr('title', link.data.label);
-		// var g = Viva.Graph.svg('g');
-		// g.append(Viva.Graph.svg('text')
-		// 		.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
-		// 		.text(link.data.label)
-		// );
-		// g.append(Viva.Graph.svg('line')
-		// 		.attr('style', 'stroke: #000; fill: #000')
-		// 		.attr('title', link.data.label)
-		// );
-		// return g;
+	var g = Viva.Graph.svg('g');
+	var l = link.data.label;
+	var d = l;
+		
+	if($('#useprefixes').is(':checked')){ // user prefers to use prefixes for display
+		d = lookupPrefix4URI(l);
+	}
+	
+	g.append(Viva.Graph.svg('text')
+			.attr('style', 'stroke-width: 0.1; font-family: Arial; font-size: 60%; stroke: #303030;')
+			.attr('title', l)
+			.text(d));
+	g.append(Viva.Graph.svg('line')
+			.attr('style', 'stroke: #606060; fill: #606060')
+			.attr('title', l));
+	return g;
+})
+.placeLink(function(nodeUI, from, to){
+	var xlaboffset = 20;
+	if(!$('#useprefixes').is(':checked')){
+			xlaboffset = 100;
+	}	
+	for (var i=0; i < nodeUI.childNodes.length; i++) {
+		if(nodeUI.childNodes[i] instanceof SVGTextElement){
+			nodeUI.childNodes[i].attr('x', (to.x - from.x)/2 + from.x - xlaboffset ).attr('y', (to.y - from.y)/2 + from.y);
+		}
+		if(nodeUI.childNodes[i] instanceof SVGLineElement){
+			nodeUI.childNodes[i].attr('x1', from.x).attr('y1', from.y);
+			nodeUI.childNodes[i].attr('x2', to.x).attr('y2', to.y);
+		}
+	}
 });
+
 
 $(document).ready(function(){
 
