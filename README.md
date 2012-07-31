@@ -26,7 +26,8 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 * support custom prefixes
 * make gravity, springLength and coeff customizable
-* arrows, ltr layout
+* add arrows to arcs
+* ltr layout (subject - key/value)
 
 ## License and Acknowledgements
 
