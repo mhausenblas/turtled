@@ -15,10 +15,16 @@ Turtled depends on the following JS libraries (in addition to jQuery), all inclu
 
 In order to deploy it, simply copy all files into a directory. An example deployment is available at [turtled.net](http://turtled.net/).
 
-## Release v0.1 planning
+## Release planning
 
-* add prefix legend to SVG export
+### v0.1
+
 * labels for links
+* add prefix legend to SVG export
+* fix bug re too long label text when no prefix matches
+
+### v0.2
+
 * support custom prefixes
 * arrows, ltr layout
 
