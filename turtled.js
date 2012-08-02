@@ -118,6 +118,7 @@ graphics.link(function(link) {
 	g.append(Viva.Graph.svg('line')
 			.attr('style', 'stroke: #606060; fill: #606060')
 			.attr('title', l));
+	
 	return g;
 })
 .placeLink(function(nodeUI, from, to){
@@ -149,6 +150,7 @@ $(document).ready(function(){
 	$(window).resize(function() {
 		$("#out").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
 		$("#out").css('height', $(window).height() * 0.85 );
+		$("#prefixesused").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
 	});
 		
 	// list saved entries

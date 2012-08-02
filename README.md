@@ -20,10 +20,11 @@ In order to deploy it, simply copy all files into a directory. An example deploy
 
 ### v0.2
 
+* fix issues
 * support custom prefixes
 * make gravity, springLength and coeff customizable
-* add arrows to arcs
 * ltr layout (subject - key/value)
+* add arrows to arcs (via path element)
 
 
 ### v0.1
