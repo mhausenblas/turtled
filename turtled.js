@@ -196,6 +196,8 @@ $(document).ready(function(){
 		});
 
 		$("#useprefixes").click(function(event){
+			usedPrefixes = [];
+			visualiseGraph(store);
 			if($('#useprefixes').is(':checked')) $("#prefixesused").show();
 			else $("#prefixesused").hide();
 			
