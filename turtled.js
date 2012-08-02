@@ -145,11 +145,11 @@ $(document).ready(function(){
 	
 	// adjust size of output area
 	$("#out").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
-	$("#out").css('height', $(window).height() * 0.85 );
+	$("#out").css('height', $(window).height() * 0.8 );
 
 	$(window).resize(function() {
 		$("#out").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
-		$("#out").css('height', $(window).height() * 0.85 );
+		$("#out").css('height', $(window).height() * 0.8 );
 		$("#prefixesused").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
 	});
 		
@@ -160,34 +160,8 @@ $(document).ready(function(){
 	rdfstore.create(function(store) {
 		
 		$("#vis").click(function(event){
-			var tinput = $("#tinput").val();
-			$("#out").html("");
-			$("#out-support").hide();
-			resetGraph(store);
-			
-			status("Parsing input ...");
-			
-			// try parsing the user-supplied input and if successful, build the graph and render it
-			store.load("text/turtle", tinput, function(success, results) {
-				if(success){
-					gstats.numtriples = results;
-					status("Valid RDF Turtle. Loaded <strong>" + results + "</strong> triples.");
-					if($("#restrictions").is(":visible")){
-						applyRestriction(store, $("#sinput").val());
-					}
-					else{
-						buildGraph(store);
-					}
-					$("#out").show("");
-					renderGraph("out");
-					$("#out-support").show();
-					showStats(store);
-				}
-				else {
-					status("<span style='color:red'>Invalid RDF Turtle :(</span>" );
-				}
-				
-			});
+			usedPrefixes = [];
+			visualiseGraph(store);
 		});
 		
 		// handling examples
@@ -222,12 +196,27 @@ $(document).ready(function(){
 		});
 
 		$("#useprefixes").click(function(event){
-			$("#out").html("");
-			renderGraph("out");
-			
 			if($('#useprefixes').is(':checked')) $("#prefixesused").show();
 			else $("#prefixesused").hide();
 			
+		});
+		
+		$("#customiseprefixes").live('click', function(event){
+			$("#customprefixes").slideToggle('medium', function() {
+			  });
+		});
+		
+		$("#addprefix").live('click', function(event){
+			if($("#cprefix").val() == '') {
+				URIs2prefixes[$("#cnamespace").val()] = 'unkown';
+				prefixes2URIs['unkown'] = $("#cnamespace").val()
+			}
+			else {
+				URIs2prefixes[$("#cnamespace").val()] = $("#cprefix").val();
+				prefixes2URIs[$("#cprefix").val()] = $("#cnamespace").val();
+			}
+			usedPrefixes = [];
+			visualiseGraph(store);
 		});
 
 		$("#svgexport").click(function(event){
@@ -264,7 +253,6 @@ $(document).ready(function(){
 					$("#restrict").css("border", "0px solid #fafafa"); 
 				} 
 			  });
-			
 		});
 		
 		// handling entry save and load
@@ -340,6 +328,37 @@ $(document).ready(function(){
 	});
 });
 
+
+function visualiseGraph(store){
+	var tinput = $("#tinput").val();
+	$("#out").html("");
+	$("#out-support").hide();
+	resetGraph(store);
+	
+	status("Parsing input ...");
+	
+	// try parsing the user-supplied input and if successful, build the graph and render it
+	store.load("text/turtle", tinput, function(success, results) {
+		if(success){
+			gstats.numtriples = results;
+			status("Valid RDF Turtle. Loaded <strong>" + results + "</strong> triples.");
+			if($("#restrictions").is(":visible")){
+				applyRestriction(store, $("#sinput").val());
+			}
+			else{
+				buildGraph(store);
+			}
+			$("#out").show("");
+			renderGraph("out");
+			$("#out-support").show();
+			showStats(store);
+		}
+		else {
+			status("<span style='color:red'>Invalid RDF Turtle :(</span>" );
+		}
+	});	
+}
+
 function status(msg){
 	$('#status').html(msg);
 }
@@ -379,6 +398,9 @@ function applyRestriction(store, query){
 						graph.addNode(results[i].o.value, { label : results[i].o.value, type : results[i].o.token }); 
 						graph.addLink(results[i].s.value, results[i].o.value, { label : results[i].p.value });
 					};
+					if($('#useprefixes').is(':checked')){
+						buildPrefixList(store);
+					}
 					status("Successfully built the graph.");
 				}
 				else {
@@ -461,8 +483,8 @@ function lookupPrefix4URI(URI){
 function buildPrefixList(store){
 	store.execute("SELECT * WHERE { ?s ?p ?o } ", function(success, results){
 		if(success) {
-			$("#prefixesused").html("<h4>Prefixes</h4>");
-			$("#prefixesused").css('width', ($(window).width() - $("#main").width() - 100) * 0.95 );
+			$("#prefixesused").html("<strong>Prefixes</strong> (<span id='customiseprefixes' class='opt-item' title='click to customise prefixes'>Customise ...</span>)<div id='prefixlist'>");
+			$("#prefixesused").css('width', ($(window).width() - $("#main").width() - 100) * 0.95);
 			for (var i=0; i < results.length; i++) {
 				if (results[i].s.token == "uri") { // inspect subject for new prefix
 					extendUsedPrefixes(results[i].s.value);
@@ -473,7 +495,10 @@ function buildPrefixList(store){
 				// inspect predicate for new prefix
 				extendUsedPrefixes(results[i].p.value);
 			}
-			if($('#useprefixes').is(':checked')) $("#prefixesused").show();
+			if($('#useprefixes').is(':checked')) {
+				$("#prefixesused").append("</div><div id='customprefixes'><input type='text' size='3' id='cprefix' value='' /> : <input type='text' size='20' id='cnamespace' value='http://example.org/#' /><button id='addprefix'>add</button></div>");
+				$("#prefixesused").show();
+			} 
 		}
 	});
 }
@@ -482,7 +507,7 @@ function extendUsedPrefixes(URI){
 	var prefix = getPrefix(URI);
 	if((prefix !== URI) && ($.inArray(prefix, usedPrefixes) == -1)) { // a prefix has been matched and not yet added
 		usedPrefixes.push(prefix);
-		$("#prefixesused").append("<a href='" + prefixes2URIs[prefix] + "' target='_new'>"+ prefix + ":</a> ");
+		$("#prefixlist").append("<a href='" + prefixes2URIs[prefix] + "' target='_new'>"+ prefix + ":</a> ");
 		// console.log("added " + prefix );
 	}
 }

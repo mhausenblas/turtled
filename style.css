@@ -186,6 +186,12 @@ svg {
 	font-size: 90%;
 }
 
+#customprefixes {
+	display: none;
+	margin: 15px 0;
+	font-size: 90%;
+}
+
 .svgout {
 	position: fixed;
 	left: 2em;
@@ -213,6 +219,11 @@ svg {
 
 .ctrl-item {
 	font-size: 80%;
+	margin: 0 .5em 0 0;
+	cursor: pointer;
+}
+
+.opt-item {
 	margin: 0 .5em 0 0;
 	cursor: pointer;
 }
